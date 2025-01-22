@@ -1,45 +1,25 @@
 import time
-import keyboard
+import pyautogui
 from docx import Document
 import PyPDF2
 import os
+import keyboard  # Library for detecting key presses
 
 def read_docx(file_path):
-    """Reads text from a .docx file."""
     doc = Document(file_path)
     return "\n".join([p.text for p in doc.paragraphs])
 
+def read_pdf(file_path):
+    with open(file_path, "rb") as file:
+        reader = PyPDF2.PdfReader(file)
+        return "\n".join([page.extract_text() for page in reader.pages])
+
 def type_text(text):
-    """Simulates typing Azerbaijani text using the keyboard library."""
     print("Typing will begin in 5 seconds. Place the cursor where you want the text.")
     time.sleep(5)  # Wait 5 seconds to allow the user to place the cursor
     for char in text:
-        try:
-            if char in AZERBAIJANI_MAP:
-                keyboard.write(AZERBAIJANI_MAP[char])
-            else:
-                keyboard.write(char)
-        except Exception as e:
-            print(f"Error typing character '{char}': {e}")
+        pyautogui.typewrite(char)
         time.sleep(0.02)  # Add a slight delay between keystrokes
-
-# Azerbaijani character mapping
-AZERBAIJANI_MAP = {
-    "ə": "ə",
-    "ı": "ı",
-    "ğ": "ğ",
-    "ö": "ö",
-    "ü": "ü",
-    "ç": "ç",
-    "ş": "ş",
-    "Ə": "Ə",
-    "İ": "İ",
-    "Ğ": "Ğ",
-    "Ö": "Ö",
-    "Ü": "Ü",
-    "Ç": "Ç",
-    "Ş": "Ş",
-}
 
 # Define the file path
 file_path = r"C:\Users\hp\Desktop\temp\word.docx"  # Adjust this to your actual path
